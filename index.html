@@ -96,8 +96,15 @@
         footer p { margin: 0; }
         footer a { color: var(--ink); text-underline-offset: .2em; }
         footer a:hover { color: var(--accent); }
-        #skip { width: 5.53rem; text-align: center; font: 500 .8rem var(--text); letter-spacing: .2em; text-transform: uppercase; color: var(--accent); background: none; border: 1px solid rgba(255, 122, 47, .5); padding: .4rem .9rem; cursor: pointer; }
-        #skip:hover { background: rgba(255, 122, 47, .12); }
+        .btns { display: flex; gap: .6rem; }
+        #skip, #snd { text-align: center; font: 500 .8rem var(--text); letter-spacing: .2em; text-transform: uppercase; color: var(--accent); background: none; border: 1px solid rgba(255, 122, 47, .5); padding: .4rem .9rem; cursor: pointer; }
+        #skip { width: 5.53rem; }
+        #snd { display: grid; place-items: center; width: 2.6rem; padding: .4rem 0; }
+        #snd svg { display: block; }
+        #snd .waves { display: none; }
+        #snd.on .waves { display: inline; }
+        #snd.on .mute { display: none; }
+        #skip:hover, #snd:hover { background: rgba(255, 122, 47, .12); }
 
         @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
     </style>
@@ -143,9 +150,20 @@
 
         <footer>
             <p>&copy; 2023&ndash;<span id="yr">2026</span> <a href="mailto:prem12321kumar@gmail.com">Prem Kumar</a></p>
-            <button id="skip" type="button">Skip</button>
+            <div class="btns">
+                <button id="snd" type="button" aria-pressed="false" aria-label="Play audio" title="Audio">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+                        <g class="waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a8 8 0 0 1 0 11"/></g>
+                        <g class="mute"><path d="M16 9l5 6M21 9l-5 6"/></g>
+                    </svg>
+                </button>
+                <button id="skip" type="button">Skip</button>
+            </div>
         </footer>
     </div>
+
+    <audio id="bgm" src="audio/an-epic-story.mp3" loop preload="none"></audio>
 
     <script>
         (function () {
@@ -206,6 +224,23 @@
 
             var items = [].slice.call(document.querySelectorAll('.item')), list = $('list'), btn = $('skip');
             var run = 0, playing = false;
+            var bgm = $('bgm'), snd = $('snd'), on = false;
+            bgm.volume = .6;
+            function sync() {
+                snd.classList.toggle('on', on);
+                snd.setAttribute('aria-pressed', on);
+                snd.setAttribute('aria-label', on ? 'Mute audio' : 'Play audio');
+            }
+            snd.addEventListener('click', function () {
+                on = !on;
+                if (on) bgm.play().catch(function () { on = false; sync(); });
+                else bgm.pause();
+                sync();
+            });
+            document.addEventListener('visibilitychange', function () {
+                if (!on) return;
+                if (document.hidden) bgm.pause(); else bgm.play().catch(function () {});
+            });
             items.forEach(function (el, k) { el.style.setProperty('--k', k); });
             function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
             function text(el) { return el.textContent.replace(/\s+/g, ' ').trim(); }
