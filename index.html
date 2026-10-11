@@ -52,13 +52,13 @@
         }
         @media (min-width: 1000px) { .screen { margin-left: 5vw; } }
 
-        h1 { margin: 0; font: 700 clamp(2rem, min(8.5vw, 11vh), 5rem)/1 var(--display); letter-spacing: .01em; text-transform: uppercase; }
+        h1 { margin: 1.2rem 0 0; font: 700 clamp(2rem, min(8.5vw, 11vh), 5rem)/1 var(--display); letter-spacing: .01em; text-transform: uppercase; }
         .w { display: inline-block; white-space: nowrap; }
         .ch { display: inline-block; white-space: pre; transition: transform .9s cubic-bezier(.2, .9, .2, 1) calc(var(--i) * 45ms); }
         .scatter .ch { transform: translateY(var(--y)) rotate(var(--r)); transition: none; }
         .ch:hover { transform: translateY(var(--y)) rotate(var(--r)); transition: transform .15s; }
 
-        .role { margin: .9rem 0 0; font: 500 clamp(.8rem, 2vh, 1.05rem)/1 var(--text); letter-spacing: .24em; text-transform: uppercase; color: var(--accent); animation: rise 1s 1s both; }
+        .role { margin: .9rem 0 0 0.2rem; font: 500 clamp(.8rem, 2vh, 1.05rem)/1 var(--text); letter-spacing: .24em; text-transform: uppercase; color: var(--accent); animation: rise 1s 1s both; }
         .role::before { content: ""; display: inline-block; width: .6em; height: .6em; margin-right: .9em; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
         @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
 
@@ -75,7 +75,8 @@
         .wd { display: inline-block; opacity: 0; filter: blur(8px); transform: translateY(.5em); transition: opacity .7s ease, filter .7s ease, transform .7s ease; transition-delay: calc(var(--k) * 110ms); }
         .d.show .wd { opacity: 1; filter: blur(0); transform: none; }
 
-        .list { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; font-size: clamp(.8rem, min(2.5vh, 3.7vw), 1.2rem); line-height: 1.45; }
+        .list { flex: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; touch-action: pan-y; display: flex; flex-direction: column; font-size: clamp(.8rem, min(2.5vh, 3.7vw), 1.2rem); line-height: 1.45; }
+        .list::-webkit-scrollbar { display: none; }
         .item { margin: 0 0 .6em; transition: opacity .6s ease, transform .6s ease; transition-delay: calc(var(--k, 0) * 70ms); }
         .item:first-child { margin-top: auto; }
         .item b { font-weight: 600; }
@@ -219,7 +220,7 @@
             function fit() {
                 list.style.fontSize = '';
                 var fs = parseFloat(getComputedStyle(list).fontSize);
-                while (list.scrollHeight > list.clientHeight + 1 && fs > 8) { fs -= .5; list.style.fontSize = fs + 'px'; }
+                while (list.scrollHeight > list.clientHeight + 1 && fs > 12) { fs -= .5; list.style.fontSize = fs + 'px'; }
             }
             function finish() {
                 playing = false; body.classList.remove('typing'); btn.textContent = 'Replay'; fit();
