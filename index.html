@@ -3,77 +3,332 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Prem Kumar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Prem Kumar | Salesforce Developer</title>
+    <meta name="description" content="Prem Kumar is a Salesforce developer who builds things and cares about getting the details right.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050202'/%3E%3Cpath d='M10 10L4 16L10 22M22 10L28 16L22 22M18.5 8L13.5 24' fill='none' stroke='%23f0894f' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --paper: #050202; --ink: #f6e6dc; --muted: #a58f84; --accent: #f0894f; --mark: #f0894f;
+            --display: "Oxanium", "Arial Narrow", Arial, sans-serif;
+            --text: "Barlow", "Helvetica Neue", Arial, sans-serif;
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; overflow: hidden; }
+        body { background: var(--paper); color: var(--ink); font: 400 1.05rem/1.6 var(--text); }
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+        #gear { position: fixed; top: 0; left: 0; z-index: -1; pointer-events: none; }
+        .glow {
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, -50%), rgba(255, 122, 47, .1), transparent 70%);
+        }
+        .cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; border-radius: 50%; opacity: 0; transform: translate(-50%, -50%); }
+        .cursor-dot { width: 5px; height: 5px; background: #ffb27a; box-shadow: 0 0 8px 1px rgba(255, 138, 61, .8); transition: opacity .2s; }
+        .cursor-ring { width: 32px; height: 32px; border: 1px solid rgba(240, 137, 79, .85); box-shadow: 0 0 12px rgba(240, 137, 79, .35), inset 0 0 10px rgba(240, 137, 79, .2); transition: width .15s, height .15s, background .15s, opacity .2s; }
+        .cursor-ring.hot { width: 48px; height: 48px; background: rgba(240, 137, 79, .12); }
+        .cursor-ring.down { width: 24px; height: 24px; }
+        body.cursor-on .cursor-dot, body.cursor-on .cursor-ring { opacity: 1; }
+        @media (hover: hover) and (pointer: fine) {
+            * { cursor: none !important; }
+        }
+        @media (pointer: coarse) {
+            body { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+        }
+        .corner { position: fixed; width: 14px; height: 14px; border: 1.5px solid rgba(255, 122, 47, .6); pointer-events: none; }
+        .tl { top: 6px; left: 6px; border-right: 0; border-bottom: 0; }
+        .tr { top: 6px; right: 6px; border-left: 0; border-bottom: 0; }
+        .bl { bottom: 6px; left: 6px; border-right: 0; border-top: 0; }
+        .br { bottom: 6px; right: 6px; border-left: 0; border-top: 0; }
+
+
+        .screen {
+            height: 100vh; height: 100svh; max-width: 50rem; display: flex; flex-direction: column;
+            padding: max(1.5rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
+        }
+        @media (min-width: 1000px) { .screen { margin-left: 5vw; } }
+
+        h1 { margin: 0; font: 700 clamp(2rem, min(8.5vw, 11vh), 5rem)/1 var(--display); letter-spacing: .01em; text-transform: uppercase; }
+        .w { display: inline-block; white-space: nowrap; }
+        .ch { display: inline-block; white-space: pre; transition: transform .9s cubic-bezier(.2, .9, .2, 1) calc(var(--i) * 45ms); }
+        .scatter .ch { transform: translateY(var(--y)) rotate(var(--r)); transition: none; }
+        .ch:hover { transform: translateY(var(--y)) rotate(var(--r)); transition: transform .15s; }
+
+        .role { margin: .9rem 0 0; font: 500 clamp(.8rem, 2vh, 1.05rem)/1 var(--text); letter-spacing: .24em; text-transform: uppercase; color: var(--accent); animation: rise 1s 1s both; }
+        .role::before { content: ""; display: inline-block; width: .6em; height: .6em; margin-right: .9em; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+        @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+        .slot { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; margin-top: clamp(.5rem, 3vh, 2rem); }
+
+        .live { position: absolute; inset: 0; display: flex; flex-direction: column; pointer-events: none; -webkit-user-select: none; user-select: none; transition: opacity .25s; }
+        body:not(.typing) .live, .live.out { opacity: 0; }
+        .ln { margin-top: auto; min-height: 2.1em; font: 700 clamp(1.5rem, min(5.4vw, 7vh), 3.4rem)/1.1 var(--display); letter-spacing: .01em; text-transform: uppercase; }
+        .ln .l { display: block; margin-bottom: .5em; font: 400 clamp(.95rem, 2.2vh, 1.2rem)/1.4 var(--text); letter-spacing: .1em; text-transform: none; color: var(--accent); }
+        .ln.hl .r { color: var(--accent); }
+        .d { min-height: 3.4em; max-width: 34rem; margin: .5em 0 auto; color: var(--muted); font-size: clamp(1rem, 2.5vh, 1.35rem); font-style: italic; }
+        .caret { display: inline-block; width: max(2px, .06em); height: .9em; margin-left: .12em; background: var(--accent); box-shadow: 0 0 6px var(--accent); vertical-align: -.08em; animation: blink 1s steps(1) infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        .wd { display: inline-block; opacity: 0; filter: blur(8px); transform: translateY(.5em); transition: opacity .7s ease, filter .7s ease, transform .7s ease; transition-delay: calc(var(--k) * 110ms); }
+        .d.show .wd { opacity: 1; filter: blur(0); transform: none; }
+
+        .list { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; font-size: clamp(.8rem, min(2.5vh, 3.7vw), 1.2rem); line-height: 1.45; }
+        .item { margin: 0 0 .6em; transition: opacity .6s ease, transform .6s ease; transition-delay: calc(var(--k, 0) * 70ms); }
+        .item:first-child { margin-top: auto; }
+        .item b { font-weight: 600; }
+        .item i { color: var(--muted); }
+        .item strong { color: var(--accent); }
+        body.typing .item { opacity: 0; transform: translateY(10px); -webkit-user-select: none; user-select: none; transition: none; }
+
+        mark { background: none; color: var(--ink); font-style: normal; text-decoration: underline wavy var(--mark); text-underline-offset: .3em; }
+        mark:hover, mark:focus-visible { text-decoration-style: solid; color: var(--accent); }
+
+        .closing { margin: 1.25rem 0 auto; transition: opacity .8s .9s; }
+        body.typing .closing { visibility: hidden; opacity: 0; transition: none; }
+        .soft { margin: 0 0 .3rem; color: var(--muted); font-size: clamp(.85rem, 2vh, 1.05rem); font-style: italic; }
+        .big { margin: 0; font: 700 clamp(1.15rem, min(3.8vw, 4.8vh), 2.2rem)/1.1 var(--display); letter-spacing: .02em; text-transform: uppercase; }
+
+        footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .75rem; padding-top: .75rem; font-size: .85rem; letter-spacing: .05em; color: var(--muted); border-top: 1px solid rgba(255, 122, 47, .25); }
+        footer p { margin: 0; }
+        footer a { color: var(--ink); text-underline-offset: .2em; }
+        footer a:hover { color: var(--accent); }
+        #skip { width: 5.53rem; text-align: center; font: 500 .8rem var(--text); letter-spacing: .2em; text-transform: uppercase; color: var(--accent); background: none; border: 1px solid rgba(255, 122, 47, .5); padding: .4rem .9rem; cursor: pointer; }
+        #skip:hover { background: rgba(255, 122, 47, .12); }
+
+        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+    </style>
 </head>
 
 <body>
-    <h1>Prem Kumar</h1>
-    <h2>Salesforce Developer</h2>
+    <canvas id="gear" aria-hidden="true"></canvas>
+    <div class="cursor-ring" aria-hidden="true"></div><div class="cursor-dot" aria-hidden="true"></div>
+    <div class="glow" aria-hidden="true"></div>
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
 
-    <hr>
+    <div class="screen">
+        <header>
+            <h1 id="name">Prem Kumar</h1>
+            <p class="role">Salesforce Developer</p>
+        </header>
 
-    <h3>About Me</h3>
-    <p>
-        Hello, I’m Prem.<br><br>
+        <main class="slot">
+            <div class="live" id="live" aria-hidden="true">
+                <div class="ln" id="ln"><span class="l" id="lead"></span><span class="r" id="rt"></span><span class="caret" id="c1"></span></div>
+                <p class="d" id="dt"></p>
+            </div>
 
-        I am the curious one,<br>
-        always asking why.<br><br>
+            <div class="list" id="list">
+                <p class="item"><b><span class="l">I am the</span> <span class="r">curious one,</span></b> <i>always asking why.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">explorer,</span></b> <i>wandering beyond what I already know.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">observer,</span></b> <i>noticing what others overlook.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">listener,</span></b> <i>hearing what others have to say.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">skeptic,</span></b> <i>questioning what seems certain.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">one who chooses,</span></b> <i>not because others do, but because it makes sense to me.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">tinkerer,</span></b> <i>taking things apart to understand how they work.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">builder,</span></b> <i>creating what people can use.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">initiator,</span></b> <i>turning thoughts into things.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r">refiner,</span></b> <i>turning good enough into something better.</i></p>
+                <p class="item"><b><span class="l">I am the</span> <span class="r"><strong>weaver of craft</strong>,</span></b> <i>bringing ideas, details, and purpose together.</i></p>
+                <p class="item"><b><span class="l">I care about</span> <span class="r">the little things,</span></b> <i>the <mark tabindex="0">subtle imperfections</mark>, the <mark tabindex="0">edge cases</mark>, the <mark tabindex="0">details that quietly make a difference</mark>.</i></p>
+                <div class="closing">
+                    <p class="soft">Because to me, building is not simply making something work.</p>
+                    <p class="big">It is making it right.</p>
+                </div>
+            </div>
+        </main>
 
-        I am the explorer,<br>
-        wandering beyond what I already know.<br><br>
+        <footer>
+            <p>&copy; 2023&ndash;<span id="yr">2026</span> <a href="mailto:prem12321kumar@gmail.com">Prem Kumar</a></p>
+            <button id="skip" type="button">Skip</button>
+        </footer>
+    </div>
 
-        I am the observer,<br>
-        noticing what others overlook.<br><br>
+    <script>
+        (function () {
+            var root = document.documentElement, body = document.body, $ = function (id) { return document.getElementById(id); };
+            var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        I am the listener,<br>
-        hearing what others have to say.<br><br>
+            var h = $('name'), txt = h.textContent, n = 0;
+            h.setAttribute('aria-label', txt); h.textContent = '';
+            txt.split(' ').forEach(function (word, wi) {
+                var w = document.createElement('span');
+                w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+                word.split('').forEach(function (c) {
+                    var s = document.createElement('span');
+                    s.className = 'ch'; s.textContent = c;
+                    s.style.setProperty('--i', n++);
+                    s.style.setProperty('--y', (Math.random() * .5 - .25).toFixed(2) + 'em');
+                    s.style.setProperty('--r', (Math.random() * 24 - 12).toFixed(1) + 'deg');
+                    w.appendChild(s);
+                });
+                if (wi) h.appendChild(document.createTextNode(' '));
+                h.appendChild(w);
+            });
+            if (!calm) {
+                h.classList.add('scatter');
+                requestAnimationFrame(function () { requestAnimationFrame(function () { h.classList.remove('scatter'); }); });
+            }
 
-        I am the skeptic,<br>
-        questioning what seems certain.<br><br>
+            var glow = document.querySelector('.glow'), dot = document.querySelector('.cursor-dot'), ring = document.querySelector('.cursor-ring');
+            var px = 0, py = 0, hov = false, held = false;
+            var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, seen = false;
+            function at(el, x, y) { el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%)'; }
+            function aim(ev) {
+                var touch = ev.pointerType !== 'mouse';
+                if (!touch) hov = overGear(ev.clientX, ev.clientY);
+                mx = ev.clientX; my = ev.clientY;
+                if (!seen || (touch && ev.type === 'pointerdown')) { seen = true; rx = mx; ry = my; }
+                body.classList.add('cursor-on');
+                at(dot, mx, my);
+                if (!calm) { px = mx / innerWidth * 2 - 1; py = -(my / innerHeight * 2 - 1); }
+                ring.classList.toggle('hot', !!(ev.target.closest && ev.target.closest('a, button, mark')));
+            }
+            addEventListener('pointermove', aim, { passive: true });
+            addEventListener('pointerdown', function (ev) { held = true; ring.classList.add('down'); aim(ev); });
+            ['pointerup', 'pointercancel', 'blur'].forEach(function (t) {
+                addEventListener(t, function (ev) {
+                    held = false; ring.classList.remove('down');
+                    if (ev.pointerType && ev.pointerType !== 'mouse') { body.classList.remove('cursor-on'); px = py = 0; }
+                });
+            });
+            root.addEventListener('mouseleave', function () { body.classList.remove('cursor-on'); hov = false; });
+            (function follow() {
+                var k = calm ? 1 : .18;
+                rx += (mx - rx) * k; ry += (my - ry) * k;
+                at(ring, rx, ry);
+                glow.style.setProperty('--gx', rx + 'px'); glow.style.setProperty('--gy', ry + 'px');
+                requestAnimationFrame(follow);
+            })();
 
-        I am the one who chooses,<br>
-        not because others do,<br>
-        but because it makes sense to me.<br><br>
+            var items = [].slice.call(document.querySelectorAll('.item')), list = $('list'), btn = $('skip');
+            var run = 0, playing = false;
+            items.forEach(function (el, k) { el.style.setProperty('--k', k); });
+            function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+            function text(el) { return el.textContent.replace(/\s+/g, ' ').trim(); }
+            async function typeInto(el, str, ms, id) {
+                for (var i = 1; i <= str.length; i++) {
+                    if (id !== run) return false;
+                    el.textContent = str.slice(0, i);
+                    await wait(ms * (.6 + Math.random() * .8));
+                }
+                return id === run;
+            }
+            function fit() {
+                list.style.fontSize = '';
+                var fs = parseFloat(getComputedStyle(list).fontSize);
+                while (list.scrollHeight > list.clientHeight + 1 && fs > 8) { fs -= .5; list.style.fontSize = fs + 'px'; }
+            }
+            function finish() {
+                playing = false; body.classList.remove('typing'); btn.textContent = 'Replay'; fit();
+            }
+            function reveal(el, str) {
+                var words = str.split(' ');
+                el.innerHTML = ''; el.classList.remove('show');
+                words.forEach(function (word, i) {
+                    var sp = document.createElement('span');
+                    sp.className = 'wd'; sp.textContent = word; sp.style.setProperty('--k', i);
+                    el.appendChild(sp); el.appendChild(document.createTextNode(' '));
+                });
+                void el.offsetWidth; el.classList.add('show');
+                return words.length;
+            }
+            async function play() {
+                var id = ++run; playing = true;
+                body.classList.add('typing'); btn.textContent = 'Skip';
+                var lead = $('lead'), rt = $('rt'), dt = $('dt'), live = $('live'), ln = $('ln');
+                lead.textContent = rt.textContent = dt.innerHTML = ''; dt.classList.remove('show');
+                await wait(1700);
+                for (var k = 0; k < items.length; k++) {
+                    if (id !== run) return;
+                    var it = items[k];
+                    ln.classList.toggle('hl', !!it.querySelector('strong'));
+                    live.classList.remove('out');
+                    lead.textContent = text(it.querySelector('.l'));
+                    rt.textContent = ''; dt.innerHTML = ''; dt.classList.remove('show');
+                    if (!await typeInto(rt, text(it.querySelector('.r')), 85, id)) return;
+                    await wait(450);
+                    if (id !== run) return;
+                    var words = reveal(dt, text(it.querySelector('i')));
+                    await wait(words * 110 + 700 + 2400);
+                    if (id !== run) return;
+                    live.classList.add('out');
+                    await wait(400);
+                }
+                if (id === run) finish();
+            }
+            btn.addEventListener('click', function () {
+                if (playing) { run++; finish(); } else play();
+            });
+            fit();
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!playing) fit(); });
+            if (calm) finish(); else play();
+            addEventListener('resize', fit);
 
-        I am the tinkerer,<br>
-        taking things apart to understand how they work.<br><br>
+            var gc = $('gear'), gx = gc.getContext('2d'), G = {}, TAU = 2 * Math.PI, spin = 0, rate = .1, tx = 0, ty = 0, gLast = performance.now();
+            function gearLayout() {
+                var w = innerWidth, h = innerHeight, dpr = Math.min(devicePixelRatio || 1, 2), wide = w >= 1000;
+                gc.width = w * dpr; gc.height = h * dpr; gc.style.width = w + 'px'; gc.style.height = h + 'px'; gx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                var n = 28, rp = Math.max(140, Math.min(320, Math.min(w, h) * .42)), P = TAU * rp / n, depth = P * .7;
+                G = { n: n, P: P, R: rp + depth / 2, root: rp - depth / 2,
+                      x: wide ? w - rp * .45 : w - rp * .35, y: wide ? h * .56 : h * .78 };
+            }
+            function overGear(x, y) { return Math.hypot(x - (G.x - tx * 14), y - (G.y + ty * 14)) < G.R; }
+            function cog(n, r0, r1, a0, a1) {
+                for (var i = 0, k, c, q, x, y; i < n; i++) {
+                    c = i * TAU / n; q = [[r0, c - a0], [r1, c - a1], [r1, c + a1], [r0, c + a0]];
+                    for (k = 0; k < 4; k++) {
+                        x = Math.cos(q[k][1]) * q[k][0]; y = Math.sin(q[k][1]) * q[k][0];
+                        if (!i && !k) gx.moveTo(x, y); else gx.lineTo(x, y);
+                    }
+                }
+                gx.closePath();
+            }
+            function circ(r, a) { gx.beginPath(); gx.arc(0, 0, r, 0, TAU); gx.strokeStyle = 'rgba(214, 138, 98, ' + a + ')'; gx.stroke(); }
+            function drawGear() {
+                var w = innerWidth, h = innerHeight, R = G.root, M = 6, i, c, a0, a1, b0, b1;
+                var ro = R * .8, ri = R * .38, sw = R * .09;
+                gx.clearRect(0, 0, w, h);
+                gx.save(); gx.translate(G.x - tx * 14, G.y + ty * 14); gx.rotate(spin); gx.lineJoin = 'round';
+                gx.beginPath();
+                cog(G.n, R, G.R, .3 * G.P / R, .17 * G.P / G.R);
+                for (i = 0; i < M; i++) {
+                    c = i * TAU / M;
+                    a0 = c + Math.asin(sw / ro); a1 = c + TAU / M - Math.asin(sw / ro);
+                    b0 = c + Math.asin(sw / ri); b1 = c + TAU / M - Math.asin(sw / ri);
+                    gx.moveTo(Math.cos(a0) * ro, Math.sin(a0) * ro);
+                    gx.arc(0, 0, ro, a0, a1, false);
+                    gx.lineTo(Math.cos(b1) * ri, Math.sin(b1) * ri);
+                    gx.arc(0, 0, ri, b1, b0, true);
+                    gx.closePath();
+                }
+                gx.moveTo(ri * .34, 0); gx.arc(0, 0, ri * .34, 0, TAU);
+                gx.fillStyle = 'rgba(183, 113, 84, .14)'; gx.fill('evenodd');
+                gx.strokeStyle = 'rgba(214, 138, 98, .8)'; gx.lineWidth = 1.25; gx.stroke();
+                gx.lineWidth = 1;
+                circ(R * .9, .28); circ(ri * .9, .28);
+                gx.beginPath(); cog(13, ri * .5, ri * .64, .15, .08);
+                gx.strokeStyle = 'rgba(214, 138, 98, .5)'; gx.stroke();
+                gx.restore();
+            }
+            gearLayout(); drawGear();
+            addEventListener('resize', function () { gearLayout(); drawGear(); });
+            if (!calm) {
+                (function gearLoop(now) {
+                    var dt = Math.min(.05, (now - gLast) / 1000); gLast = now;
+                    rate += ((hov || held ? 1.6 : .1) - rate) * .06;
+                    spin += dt * rate;
+                    tx += (px - tx) * .05; ty += (py - ty) * .05;
+                    drawGear();
+                    requestAnimationFrame(gearLoop);
+                })(gLast);
+            }
 
-        I am the builder,<br>
-        creating what people can use.<br><br>
-
-        I am the initiator,<br>
-        turning thoughts into things.<br><br>
-
-        I am the refiner,<br>
-        turning good enough into something better.<br><br>
-
-        I am the <strong>weaver of craft</strong>,<br>
-        bringing ideas, details, and purpose together.<br><br>
-
-        I care about the little things,<br>
-        the subtle imperfections,<br>
-        the edge cases,<br>
-        the details that quietly make a difference.<br><br>
-
-        Because to me,<br>
-        building is not simply making something work.<br>
-
-        It is making it right.<br><br>
-
-        <i>
-            And there’s no issue with your internet,<br>
-            this website is without CSS.
-        </i>
-    </p>
-
-    <hr>
-
-    <footer>
-        <p>
-            &copy; 2023
-            <a href="mailto:prem12321kumar@gmail.com">Prem Kumar</a>
-        </p>
-    </footer>
+            $('yr').textContent = new Date().getFullYear();
+        })();
+    </script>
 </body>
 
 </html>
