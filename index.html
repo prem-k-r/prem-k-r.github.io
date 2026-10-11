@@ -84,8 +84,8 @@
         .item strong { color: var(--accent); }
         body.typing .item { opacity: 0; transform: translateY(10px); -webkit-user-select: none; user-select: none; transition: none; }
 
-        mark { background: none; color: var(--ink); font-style: normal; text-decoration: underline wavy var(--mark); text-underline-offset: .3em; }
-        mark:hover, mark:focus-visible { text-decoration-style: solid; color: var(--accent); }
+        mark { background: none; color: var(--ink); font-style: normal; }
+        mark:hover, mark:focus-visible { color: var(--accent); }
 
         .closing { margin: 1.25rem 0 auto; transition: opacity .8s .9s; }
         body.typing .closing { visibility: hidden; opacity: 0; transition: none; }
@@ -319,7 +319,9 @@
             if (!calm) {
                 (function gearLoop(now) {
                     var dt = Math.min(.05, (now - gLast) / 1000); gLast = now;
-                    rate += ((hov || held ? 1.6 : .1) - rate) * .06;
+                    var targetRate = (hov || held) ? 1.6 : .1;
+                    var easing = targetRate > rate ? 0.06 : 0.025;
+                    rate += (targetRate - rate) * easing;
                     spin += dt * rate;
                     tx += (px - tx) * .05; ty += (py - ty) * .05;
                     drawGear();
