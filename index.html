@@ -89,7 +89,7 @@
 
         .closing { margin: 1.25rem 0 auto; transition: opacity .8s .9s; }
         body.typing .closing { visibility: hidden; opacity: 0; transition: none; }
-        .soft { margin: 0 0 .3rem; color: var(--muted); font-size: clamp(.85rem, 2vh, 1.05rem); font-style: italic; }
+        .soft { margin: 0 0 .3rem; color: var(--muted); font-size: clamp(.82rem, 2.4vw, 1.05rem); font-style: italic; }
         .big { margin: 0; font: 700 clamp(1.15rem, min(3.8vw, 4.8vh), 2.2rem)/1.1 var(--display); letter-spacing: .02em; text-transform: uppercase; }
 
         footer { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: .75rem; padding-top: .75rem; font-size: .85rem; letter-spacing: .05em; color: var(--muted); border-top: 1px solid rgba(255, 122, 47, .25); }
@@ -354,7 +354,7 @@
             if (!calm) {
                 (function gearLoop(now) {
                     var dt = Math.min(.05, (now - gLast) / 1000); gLast = now;
-                    var targetRate = (hov || held) ? 1.6 : .1;
+                    var targetRate = (hov && held) ? 2.0 : (hov || held) ? 1.5 : .1;
                     var easing = targetRate > rate ? 0.06 : 0.025;
                     rate += (targetRate - rate) * easing;
                     spin += dt * rate;
