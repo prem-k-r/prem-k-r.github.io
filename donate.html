@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Support Prem Kumar | Donate</title>
+    <meta name="description" content="Support Prem Kumar's open-source browser extensions with a UPI donation.">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23050202'/%3E%3Cpath d='M10 10L4 16L10 22M22 10L28 16L22 22M18.5 8L13.5 24' fill='none' stroke='%23f0894f' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --paper: #050202;
+            --ink: #f6e6dc;
+            --muted: #a58f84;
+            --accent: #f0894f;
+            --line: rgba(255, 122, 47, .25);
+            --display: "Oxanium", "Arial Narrow", Arial, sans-serif;
+            --text: "Barlow", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            background: var(--paper);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--paper);
+            color: var(--ink);
+            font: 400 1.05rem/1.6 var(--text);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        a {
+            color: var(--ink);
+            text-underline-offset: .2em;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        .glow {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, -50%), rgba(255, 122, 47, .1), transparent 70%);
+        }
+
+        .corner {
+            position: fixed;
+            width: 14px;
+            height: 14px;
+            border: 1.5px solid rgba(255, 122, 47, .6);
+            pointer-events: none;
+        }
+
+        .tl {
+            top: 6px;
+            left: 6px;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .tr {
+            top: 6px;
+            right: 6px;
+            border-left: 0;
+            border-bottom: 0;
+        }
+
+        .bl {
+            bottom: 6px;
+            left: 6px;
+            border-right: 0;
+            border-top: 0;
+        }
+
+        .br {
+            bottom: 6px;
+            right: 6px;
+            border-left: 0;
+            border-top: 0;
+        }
+
+        .page {
+            max-width: 56rem;
+            padding: max(1.5rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
+        }
+
+        @media (min-width: 1000px) {
+            .page {
+                margin-left: 5vw;
+            }
+        }
+
+        h1 {
+            margin: 1.2rem 0 0;
+            font: 700 clamp(2rem, 8vw, 4.2rem)/1 var(--display);
+            letter-spacing: .01em;
+            text-transform: uppercase;
+        }
+
+        .role {
+            margin: .9rem 0 0 .2rem;
+            font: 500 clamp(.8rem, 2vw, 1.05rem)/1 var(--text);
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            color: var(--accent);
+            animation: rise 1s both;
+        }
+
+        .role::before {
+            content: "";
+            display: inline-block;
+            width: .6em;
+            height: .6em;
+            margin-right: .9em;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+        }
+
+        .intro {
+            max-width: 36rem;
+            margin: 2rem 0 0;
+        }
+
+        .intro p {
+            margin: 0 0 1rem;
+        }
+
+        .intro .hi {
+            font: 700 clamp(1.3rem, 4vw, 2rem)/1.15 var(--display);
+            text-transform: uppercase;
+        }
+
+        .intro ul {
+            margin: 0 0 1rem;
+            padding: 0;
+            list-style: none;
+        }
+
+        .intro li {
+            position: relative;
+            padding-left: 1.4rem;
+            margin-bottom: .4rem;
+        }
+
+        .intro li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: .6em;
+            width: .5em;
+            height: .5em;
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .intro .thanks {
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        .intro .thanks strong {
+            color: var(--accent);
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        .pay {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 2.5rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        @media (max-width: 560px) {
+            .pay {
+                grid-template-columns: 1fr;
+                justify-items: start;
+            }
+        }
+
+        .qr {
+            width: 12.5rem;
+            padding: .8rem;
+            background: var(--ink);
+            line-height: 0;
+            box-shadow: 0 0 0 1px var(--accent), 0 0 24px rgba(240, 137, 79, .25);
+        }
+
+        .qr svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .meta h2 {
+            margin: 0 0 .3rem;
+            font: 700 1.4rem/1.1 var(--display);
+            text-transform: uppercase;
+            letter-spacing: .02em;
+        }
+
+        .meta p {
+            margin: 0 0 1rem;
+            color: var(--muted);
+        }
+
+        .upi {
+            display: block;
+            margin: 0 0 1rem;
+            font: 600 clamp(1rem, 4vw, 1.3rem)/1.3 var(--text);
+            word-break: break-all;
+            color: var(--ink);
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .6rem;
+        }
+
+        .btn {
+            display: inline-block;
+            text-align: center;
+            font: 500 .8rem/1.2 var(--text);
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--accent);
+            background: none;
+            border: 1px solid rgba(255, 122, 47, .5);
+            padding: .6rem 1rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: rgba(255, 122, 47, .12);
+            color: var(--accent);
+        }
+
+        .btn[aria-disabled="true"] {
+            opacity: .4;
+            cursor: not-allowed;
+            pointer-events: none;
+            border-style: dashed;
+        }
+
+        .btn small {
+            display: block;
+            margin-top: .25rem;
+            font-size: .65rem;
+            letter-spacing: .12em;
+            color: var(--muted);
+        }
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .top {
+            margin-top: .4rem;
+            justify-content: flex-end;
+        }
+
+        .btn.solid {
+            color: var(--paper);
+            background: var(--accent);
+            border-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .btn.solid:hover {
+            color: var(--paper);
+            background: #ff9d63;
+        }
+
+        .intro p a {
+            color: var(--accent);
+        }
+
+        .upi-open {
+            display: none;
+        }
+
+        @media (pointer: coarse) {
+            .upi-open {
+                display: inline-block;
+            }
+        }
+
+        .more {
+            margin-top: 2rem;
+        }
+
+        .more h2 {
+            margin: 0 0 .3rem;
+            font: 700 1.1rem/1.1 var(--display);
+            text-transform: uppercase;
+        }
+
+        .more p {
+            margin: 0 0 1rem;
+            color: var(--muted);
+            font-size: .95rem;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            padding-top: .75rem;
+            font-size: .85rem;
+            letter-spacing: .05em;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (min-width: 1000px) {
+            .page {
+                max-width: 76rem;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) 31rem;
+                gap: 4rem;
+                align-items: start;
+            }
+
+            .intro {
+                max-width: 36rem;
+            }
+
+            .side {
+                padding-left: 2rem;
+                border-left: 1px solid var(--line);
+                margin-top: 2rem;
+            }
+
+            .pay {
+                margin-top: 0;
+                gap: 1.5rem;
+                padding: 0 0 1.5rem;
+                border-top: 0;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .qr {
+                width: 11rem;
+                padding: .6rem;
+            }
+
+            .upi {
+                font-size: 1.05rem;
+            }
+        }
+
+        @media (min-width: 1000px) and (min-height: 620px) {
+
+            html,
+            body {
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .page {
+                padding-top: clamp(2rem, 7vh, 4.5rem);
+            }
+
+            .page {
+                height: 100vh;
+                height: 100svh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            h1 {
+                margin-top: .6rem;
+                font-size: clamp(2rem, min(6vw, 8vh), 4.2rem);
+            }
+
+            .intro {
+                margin-top: clamp(.75rem, 3vh, 2rem);
+                font-size: clamp(.9rem, 2.3vh, 1.05rem);
+            }
+
+            .grid {
+                flex: 1;
+                min-height: 0;
+            }
+
+            .side {
+                margin-top: clamp(.75rem, 3vh, 2rem);
+            }
+
+            footer {
+                margin-top: .5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow" aria-hidden="true"></div>
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+
+    <div class="page">
+        <header class="head">
+            <div>
+                <h1>Support Prem</h1>
+                <p class="role">Salesforce Developer</p>
+            </div>
+            <nav class="row top" aria-label="Links">
+                <a class="btn solid" href="https://prem-k-r.github.io/" target="_blank" rel="noopener">About me</a>
+                <a class="btn" href="https://github.com/prem-k-r" target="_blank" rel="noopener">GitHub</a>
+            </nav>
+        </header>
+
+        <div class="grid">
+            <section class="intro">
+                <p class="hi">Hi, I'm Prem Kumar!</p>
+                <p>I'm a Salesforce developer and the maintainer of <a
+                        href="https://github.com/prem-k-r/MaterialYouNewTab" target="_blank" rel="noopener">MYNT
+                        (Material You New Tab)</a>, a new tab extension for Chrome and Firefox, and <a
+                        href="https://github.com/prem-k-r/Salesforce-Inspector-Reloaded-Plus" target="_blank"
+                        rel="noopener">SIR Plus</a>, a fork of Salesforce Inspector Reloaded with numerous bug fixes,
+                    enhancements, and improvements. I also build browser extensions and open-source tools that make
+                    everyday work a little smoother.</p>
+                <p>I care about the details: the edge cases, the small imperfections, and getting things right instead
+                    of just getting them to work. Your support helps me:</p>
+                <ul>
+                    <li>Maintain and improve MYNT, SIR Plus and my other extensions.</li>
+                    <li>Build new features based on community feedback.</li>
+                    <li>Keep sharing my work through open-source projects.</li>
+                </ul>
+                <p class="thanks">Every contribution, big or small, helps keep these tools free and open to everyone.
+                    <strong>Thank you for your support!</strong></p>
+            </section>
+
+            <aside class="side">
+                <section class="pay" aria-labelledby="upi-h">
+                    <div class="qr"><svg viewBox="0 0 33 33" shape-rendering="crispEdges" role="img"
+                            aria-label="UPI QR code for prem12321kumar@upi">
+                            <path fill="#050202"
+                                d="M0 0h7v1h-7zM8 0h1v1h-1zM10 0h1v1h-1zM15 0h3v1h-3zM20 0h4v1h-4zM26 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM11 1h2v1h-2zM16 1h2v1h-2zM19 1h2v1h-2zM22 1h1v1h-1zM26 1h1v1h-1zM32 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM9 2h1v1h-1zM13 2h1v1h-1zM15 2h1v1h-1zM17 2h1v1h-1zM19 2h1v1h-1zM21 2h1v1h-1zM23 2h2v1h-2zM26 2h1v1h-1zM28 2h3v1h-3zM32 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h5v1h-5zM14 3h2v1h-2zM17 3h2v1h-2zM26 3h1v1h-1zM28 3h3v1h-3zM32 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h1v1h-1zM13 4h2v1h-2zM19 4h1v1h-1zM23 4h1v1h-1zM26 4h1v1h-1zM28 4h3v1h-3zM32 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM12 5h3v1h-3zM16 5h1v1h-1zM18 5h2v1h-2zM26 5h1v1h-1zM32 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h7v1h-7zM8 7h1v1h-1zM15 7h4v1h-4zM21 7h4v1h-4zM0 8h1v1h-1zM4 8h1v1h-1zM6 8h6v1h-6zM16 8h2v1h-2zM21 8h2v1h-2zM25 8h5v1h-5zM32 8h1v1h-1zM0 9h1v1h-1zM2 9h3v1h-3zM8 9h2v1h-2zM12 9h5v1h-5zM18 9h1v1h-1zM20 9h1v1h-1zM22 9h4v1h-4zM27 9h1v1h-1zM30 9h2v1h-2zM0 10h1v1h-1zM2 10h5v1h-5zM10 10h3v1h-3zM15 10h2v1h-2zM20 10h10v1h-10zM31 10h1v1h-1zM3 11h1v1h-1zM5 11h1v1h-1zM7 11h1v1h-1zM11 11h1v1h-1zM14 11h4v1h-4zM19 11h1v1h-1zM21 11h1v1h-1zM23 11h1v1h-1zM25 11h1v1h-1zM27 11h2v1h-2zM1 12h1v1h-1zM5 12h2v1h-2zM9 12h1v1h-1zM11 12h1v1h-1zM13 12h2v1h-2zM18 12h5v1h-5zM25 12h2v1h-2zM28 12h1v1h-1zM31 12h2v1h-2zM0 13h1v1h-1zM2 13h3v1h-3zM8 13h3v1h-3zM12 13h1v1h-1zM16 13h4v1h-4zM22 13h2v1h-2zM25 13h1v1h-1zM27 13h1v1h-1zM29 13h1v1h-1zM1 14h1v1h-1zM3 14h1v1h-1zM6 14h2v1h-2zM9 14h1v1h-1zM13 14h1v1h-1zM16 14h1v1h-1zM20 14h1v1h-1zM22 14h3v1h-3zM28 14h4v1h-4zM0 15h1v1h-1zM2 15h2v1h-2zM8 15h1v1h-1zM10 15h3v1h-3zM17 15h2v1h-2zM20 15h3v1h-3zM25 15h1v1h-1zM28 15h2v1h-2zM31 15h1v1h-1zM0 16h1v1h-1zM2 16h2v1h-2zM5 16h3v1h-3zM9 16h3v1h-3zM15 16h1v1h-1zM17 16h1v1h-1zM21 16h4v1h-4zM26 16h4v1h-4zM32 16h1v1h-1zM2 17h1v1h-1zM9 17h1v1h-1zM13 17h1v1h-1zM16 17h2v1h-2zM20 17h1v1h-1zM23 17h1v1h-1zM27 17h1v1h-1zM1 18h1v1h-1zM4 18h3v1h-3zM8 18h3v1h-3zM13 18h1v1h-1zM15 18h2v1h-2zM18 18h1v1h-1zM22 18h2v1h-2zM25 18h1v1h-1zM31 18h1v1h-1zM1 19h1v1h-1zM3 19h2v1h-2zM7 19h1v1h-1zM9 19h4v1h-4zM14 19h1v1h-1zM16 19h1v1h-1zM19 19h1v1h-1zM21 19h3v1h-3zM25 19h1v1h-1zM29 19h1v1h-1zM32 19h1v1h-1zM0 20h2v1h-2zM4 20h1v1h-1zM6 20h1v1h-1zM10 20h1v1h-1zM12 20h2v1h-2zM16 20h1v1h-1zM19 20h1v1h-1zM21 20h1v1h-1zM24 20h3v1h-3zM28 20h2v1h-2zM32 20h1v1h-1zM0 21h1v1h-1zM8 21h1v1h-1zM11 21h3v1h-3zM18 21h1v1h-1zM20 21h1v1h-1zM27 21h1v1h-1zM29 21h1v1h-1zM4 22h4v1h-4zM11 22h1v1h-1zM13 22h1v1h-1zM15 22h1v1h-1zM17 22h2v1h-2zM20 22h2v1h-2zM23 22h1v1h-1zM26 22h2v1h-2zM31 22h1v1h-1zM2 23h1v1h-1zM5 23h1v1h-1zM7 23h1v1h-1zM9 23h3v1h-3zM15 23h4v1h-4zM20 23h2v1h-2zM23 23h1v1h-1zM25 23h1v1h-1zM27 23h2v1h-2zM32 23h1v1h-1zM0 24h2v1h-2zM3 24h4v1h-4zM8 24h3v1h-3zM14 24h1v1h-1zM16 24h2v1h-2zM19 24h1v1h-1zM21 24h2v1h-2zM24 24h7v1h-7zM32 24h1v1h-1zM8 25h1v1h-1zM12 25h1v1h-1zM14 25h3v1h-3zM18 25h1v1h-1zM20 25h1v1h-1zM23 25h2v1h-2zM28 25h1v1h-1zM31 25h1v1h-1zM0 26h7v1h-7zM8 26h3v1h-3zM12 26h1v1h-1zM14 26h2v1h-2zM17 26h1v1h-1zM20 26h1v1h-1zM24 26h1v1h-1zM26 26h1v1h-1zM28 26h3v1h-3zM0 27h1v1h-1zM6 27h1v1h-1zM12 27h2v1h-2zM15 27h4v1h-4zM21 27h2v1h-2zM24 27h1v1h-1zM28 27h2v1h-2zM31 27h1v1h-1zM0 28h1v1h-1zM2 28h3v1h-3zM6 28h1v1h-1zM8 28h2v1h-2zM13 28h1v1h-1zM18 28h2v1h-2zM21 28h2v1h-2zM24 28h5v1h-5zM31 28h1v1h-1zM0 29h1v1h-1zM2 29h3v1h-3zM6 29h1v1h-1zM9 29h1v1h-1zM12 29h1v1h-1zM14 29h1v1h-1zM16 29h2v1h-2zM21 29h1v1h-1zM23 29h1v1h-1zM25 29h2v1h-2zM28 29h1v1h-1zM30 29h1v1h-1zM0 30h1v1h-1zM2 30h3v1h-3zM6 30h1v1h-1zM14 30h1v1h-1zM16 30h3v1h-3zM20 30h2v1h-2zM24 30h6v1h-6zM0 31h1v1h-1zM6 31h1v1h-1zM10 31h3v1h-3zM14 31h1v1h-1zM17 31h3v1h-3zM21 31h1v1h-1zM24 31h1v1h-1zM0 32h7v1h-7zM8 32h1v1h-1zM10 32h1v1h-1zM12 32h1v1h-1zM15 32h1v1h-1zM17 32h1v1h-1zM19 32h1v1h-1zM21 32h1v1h-1zM24 32h2v1h-2zM27 32h3v1h-3zM32 32h1v1h-1z" />
+                        </svg></div>
+                    <div class="meta">
+                        <h2 id="upi-h">Donate via UPI</h2>
+                        <p>Scan with any UPI app, or pay to this UPI ID.</p>
+                        <span class="upi" id="upi">prem12321kumar@upi</span>
+                        <div class="row">
+                            <button class="btn" id="copy" type="button">Copy UPI ID</button>
+                            <a class="btn upi-open" href="upi://pay?pa=prem12321kumar@upi&pn=Prem%20Kumar&cu=INR">Open
+                                UPI app</a>
+                        </div>
+                    </div>
+                </section>
+
+<section class="more" aria-labelledby="more-h">
+    <h2 id="more-h">Other ways to support</h2>
+    <p>You can also support my work through these platforms.</p>
+    <div class="row">
+        <a class="btn" href="https://github.com/sponsors/prem-k-r"
+            target="_blank" rel="noopener">GitHub Sponsors</a>
+        <a class="btn" href="https://buymeacoffee.com/prem_kr"
+            target="_blank" rel="noopener">Buy Me a Coffee</a>
+    </div>
+</section>
+
+            </aside>
+        </div>
+
+        <footer>
+            <p>&copy; 2023&ndash;<span id="yr">2026</span> <a href="mailto:prem12321kumar@gmail.com">Prem Kumar</a></p>
+        </footer>
+    </div>
+
+    <script>
+        (function () {
+            var glow = document.querySelector('.glow');
+            addEventListener('pointermove', function (e) {
+                glow.style.setProperty('--gx', e.clientX + 'px');
+                glow.style.setProperty('--gy', e.clientY + 'px');
+            }, { passive: true });
+
+            var copy = document.getElementById('copy'), id = document.getElementById('upi').textContent;
+            copy.addEventListener('click', function () {
+                function done(ok) {
+                    copy.textContent = ok ? 'Copied' : 'Copy failed';
+                    setTimeout(function () { copy.textContent = 'Copy UPI ID'; }, 1600);
+                }
+                if (navigator.clipboard) navigator.clipboard.writeText(id).then(function () { done(true); }, function () { done(false); });
+                else done(false);
+            });
+            document.getElementById('yr').textContent = new Date().getFullYear();
+        })();
+    </script>
+</body>
+
+</html>
