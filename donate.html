@@ -112,35 +112,13 @@
 
         h1 {
             margin: 1.2rem 0 0;
-            font: 700 clamp(2rem, 8vw, 4.2rem)/1 var(--display);
+            font: 700 clamp(1.75rem, 6.5vw, 3.4rem)/1 var(--display);
             letter-spacing: .01em;
             text-transform: uppercase;
         }
 
-        .role {
-            margin: .9rem 0 0 .2rem;
-            font: 500 clamp(.8rem, 2vw, 1.05rem)/1 var(--text);
-            letter-spacing: .24em;
-            text-transform: uppercase;
-            color: var(--accent);
-            animation: rise 1s both;
-        }
-
-        .role::before {
-            content: "";
-            display: inline-block;
-            width: .6em;
-            height: .6em;
-            margin-right: .9em;
-            background: var(--accent);
-            box-shadow: 0 0 10px var(--accent);
-        }
-
-        @keyframes rise {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
+        .grid {
+            margin-top: 1.25rem;
         }
 
         .intro {
@@ -450,9 +428,6 @@
 
             .page {
                 padding-top: clamp(2rem, 7vh, 4.5rem);
-            }
-
-            .page {
                 height: 100vh;
                 height: 100svh;
                 display: flex;
@@ -461,7 +436,7 @@
 
             h1 {
                 margin-top: .6rem;
-                font-size: clamp(2rem, min(6vw, 8vh), 4.2rem);
+                font-size: clamp(1.75rem, min(5vw, 6.5vh), 3.4rem);
             }
 
             .intro {
@@ -472,6 +447,7 @@
             .grid {
                 flex: 1;
                 min-height: 0;
+                margin-top: clamp(1rem, 2.5vh, 1.75rem);
             }
 
             .side {
@@ -498,10 +474,7 @@
 
     <div class="page">
         <header class="head">
-            <div>
-                <h1>Support Prem</h1>
-                <p class="role">Salesforce Developer</p>
-            </div>
+            <h1>Support My Work</h1>
             <nav class="row top" aria-label="Links">
                 <a class="btn solid" href="https://prem-k-r.github.io/" target="_blank" rel="noopener">About me</a>
                 <a class="btn" href="https://github.com/prem-k-r" target="_blank" rel="noopener">GitHub</a>
@@ -511,17 +484,16 @@
         <div class="grid">
             <section class="intro">
                 <p class="hi">Hi, I'm Prem Kumar!</p>
-                <p>I'm a Salesforce developer and the maintainer of <a
+                <p>I'm a Salesforce developer by profession and the maintainer of <a
                         href="https://github.com/prem-k-r/MaterialYouNewTab" target="_blank" rel="noopener">MYNT
                         (Material You New Tab)</a>, a new tab extension for Chrome and Firefox, and <a
                         href="https://github.com/prem-k-r/Salesforce-Inspector-Reloaded-Plus" target="_blank"
                         rel="noopener">SIR Plus</a>, a fork of Salesforce Inspector Reloaded with numerous bug fixes,
-                    enhancements, and improvements. I also build browser extensions and open-source tools that make
-                    everyday work a little smoother.</p>
+                    enhancements, and improvements. I also contribute to other free and open-source projects.</p>
                 <p>I care about the details: the edge cases, the small imperfections, and getting things right instead
                     of just getting them to work. Your support helps me:</p>
                 <ul>
-                    <li>Maintain and improve MYNT, SIR Plus and my other extensions.</li>
+                    <li>Maintain and improve MYNT, SIR Plus and my other projects.</li>
                     <li>Build new features based on community feedback.</li>
                     <li>Keep sharing my work through open-source projects.</li>
                 </ul>
@@ -575,7 +547,6 @@
                         </a>
                     </div>
                 </section>
-
             </aside>
         </div>
 
