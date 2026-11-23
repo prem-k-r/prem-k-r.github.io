@@ -45,14 +45,14 @@
         .bl { bottom: 6px; left: 6px; border-right: 0; border-top: 0; }
         .br { bottom: 6px; right: 6px; border-left: 0; border-top: 0; }
 
-
         .screen {
             height: 100vh; height: 100svh; max-width: 50rem; display: flex; flex-direction: column;
             padding: max(1.5rem, env(safe-area-inset-top)) max(1.5rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1.5rem, env(safe-area-inset-left));
         }
         @media (min-width: 1000px) { .screen { margin-left: 5vw; } }
 
-        h1 { margin: 1.2rem 0 0; font: 700 clamp(2rem, min(8.5vw, 11vh), 5rem)/1 var(--display); letter-spacing: .01em; text-transform: uppercase; }
+        .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-top: 1.2rem; }
+        h1 { margin: 0; font: 700 clamp(2rem, min(8.5vw, 11vh), 5rem)/1 var(--display); letter-spacing: .01em; text-transform: uppercase; }
         .w { display: inline-block; white-space: nowrap; }
         .ch { display: inline-block; white-space: pre; transition: transform .9s cubic-bezier(.2, .9, .2, 1) calc(var(--i) * 45ms); }
         .scatter .ch { transform: translateY(var(--y)) rotate(var(--r)); transition: none; }
@@ -61,6 +61,22 @@
         .role { margin: .9rem 0 0 0.2rem; font: 500 clamp(.8rem, 2vh, 1.05rem)/1 var(--text); letter-spacing: .24em; text-transform: uppercase; color: var(--accent); animation: rise 1s 1s both; }
         .role::before { content: ""; display: inline-block; width: .6em; height: .6em; margin-right: .9em; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
         @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+
+        .top { display: flex; align-items: stretch; gap: .6rem; }
+        @media (min-width: 800px) {
+            .top {
+                position: fixed;
+                top: max(1.5rem, env(safe-area-inset-top));
+                right: max(1.5rem, env(safe-area-inset-right));
+                z-index: 10;
+            }
+        }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; font: 500 .8rem/1.2 var(--text); letter-spacing: .2em; text-transform: uppercase; text-decoration: none; color: var(--accent); background: none; border: 1px solid rgba(255, 122, 47, .5); padding: .45rem .85rem; transition: background .2s, color .2s; }
+        .btn.icon { width: 2.3rem; }
+        .btn svg { width: 1.05rem; height: 1.05rem; fill: currentColor; display: block; flex-shrink: 0; }
+        .btn:hover { background: rgba(255, 122, 47, .12); color: var(--accent); }
+        .btn.solid { color: var(--paper); background: var(--accent); border-color: var(--accent); font-weight: 600; }
+        .btn.solid:hover { color: var(--paper); background: #ff9d63; }
 
         .slot { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; margin-top: clamp(.5rem, 3vh, 2rem); }
 
@@ -117,9 +133,19 @@
     <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
 
     <div class="screen">
-        <header>
-            <h1 id="name">Prem Kumar</h1>
-            <p class="role">Salesforce Developer</p>
+        <header class="head">
+            <div>
+                <h1 id="name">Prem Kumar</h1>
+                <p class="role">Salesforce Developer</p>
+            </div>
+            <nav class="top" aria-label="Links">
+                <a class="btn icon" href="https://github.com/prem-k-r" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.06 11.06 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/>
+                    </svg>
+                </a>
+                <a class="btn solid" href="https://prem-k-r.github.io/donate" target="_blank" rel="noopener">Donate</a>
+            </nav>
         </header>
 
         <main class="slot">
